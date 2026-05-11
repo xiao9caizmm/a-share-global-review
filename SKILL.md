@@ -1,6 +1,6 @@
 ---
 name: a-share-global-review
-description: Integrated A-share daily review workflow combining evening A-share short/quant review with morning global-market mapping. Use when asked for 晚间复盘, 早间复盘, 全球市场映射A股, 美股映射A股, 美股大涨板块, 商品/黄金/白银映射, 早间消息面复盘, or a full A股盘前/盘后复盘 system.
+description: Integrated A-share daily review workflow combining evening A-share short/quant review with morning global-market mapping and optional SMTP email delivery. Use when asked for 晚间复盘, 早间复盘, 全球市场映射A股, 美股映射A股, 美股大涨板块, 商品/黄金/白银映射, 早间消息面复盘, 邮件发送复盘, or a full A股盘前/盘后复盘 system.
 ---
 
 # A股全球映射复盘 Skill
@@ -106,7 +106,7 @@ US/global signals can add to `叙事催化` and `次日观察优先级`; they mu
 2. Use `a-share-short-review` to collect market data and write the short-review structure.
 3. Use `quant-test` to calculate 880005 emotion clock, quantitative score, six-direction main-line ranking, stock pool, windows, and position cap.
 4. Ensure all limit-up/down statistics use non-ST口径.
-5. Save under `A股复盘` unless the user specifies another folder. Suggested filename: `YYYYMMDD A股晚间复盘.md` or keep the user's naming convention.
+5. Save evening integrated A-share files under `A股复盘/全球映射早盘复盘` unless the user specifies another folder. Suggested filename: `YYYYMMDD A股全球映射复盘.md` or keep the user's naming convention.
 
 Required evening sections:
 
@@ -128,7 +128,32 @@ Required evening sections:
 4. Search fresh morning news and classify catalysts.
 5. Compare with the prior evening A-share main-line ranking. State which A-share directions rise or fall in priority.
 6. Output only an opening plan. Do not turn overnight signals into direct buy instructions.
-7. Save under `A股复盘` unless the user specifies another folder. Suggested filename: `YYYYMMDD 全球市场映射A股早间复盘.md`.
+7. Save morning global-mapping files under `A股复盘/全球映射早盘复盘` unless the user specifies another folder. Suggested filename: `YYYYMMDD 全球市场映射A股早间复盘.md`.
+8. If email delivery is requested or configured, send a second copy as HTML email using the rules below. Do not send raw Markdown as the email body.
+
+## Optional Email Delivery
+
+This skill can send a mobile-friendly HTML email copy of the generated review, but credentials must be configured by the user. Never hard-code or commit real SMTP passwords, authorization codes, or recipient addresses into the skill.
+
+Use bundled script `scripts/send_review_email.py` after the Markdown file is generated:
+
+```powershell
+$env:A_SHARE_REVIEW_SMTP_HOST='smtp.qq.com'
+$env:A_SHARE_REVIEW_SMTP_PORT='465'
+$env:A_SHARE_REVIEW_SMTP_USER='your_sender@qq.com'
+$env:A_SHARE_REVIEW_SMTP_PASS='your_smtp_authorization_code'
+$env:A_SHARE_REVIEW_TO='recipient@qq.com'
+python 'C:\Users\33256\.codex\skills\a-share-global-review\scripts\send_review_email.py' --file 'A股复盘\全球映射早盘复盘\YYYYMMDD全球市场映射A股早间复盘.md' --subject 'YYYYMMDD A股全球映射早盘复盘'
+```
+
+Configuration rules:
+
+- QQ Mail uses `smtp.qq.com` with SSL port `465`.
+- `A_SHARE_REVIEW_SMTP_PASS` should be the mailbox SMTP authorization code/app password, not the login password.
+- `A_SHARE_REVIEW_TO` may contain one or more recipients separated by commas.
+- If any required field is missing, do not guess. Ask the user to configure it or skip email delivery.
+- The email body must be generated from the Markdown review as styled HTML with a single-column, phone-readable layout and compact tables.
+- The Markdown file is still saved under `A股复盘/全球映射早盘复盘`; email is only an additional delivery channel.
 
 Required morning sections:
 
