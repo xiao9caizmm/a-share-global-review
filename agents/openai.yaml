@@ -1,0 +1,4 @@
+interface:
+  display_name: "A股全球映射复盘"
+  short_description: "整合A股晚间复盘、美股主题映射、商品贵金属和早间消息面的盘前盘后工作流"
+  default_prompt: "使用A股全球映射复盘skill，生成指定日期的A股晚间复盘，并在早间结合美股、商品和消息面对A股开盘方向做映射分析。"
