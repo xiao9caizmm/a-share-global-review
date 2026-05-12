@@ -34,6 +34,8 @@ Use the existing skills first:
 
 Hard rule: 涨停、跌停、炸板、封板率、连板梯队、连板晋级率 use non-ST口径 by default. Exclude names containing `ST`, `*ST`, `S*ST`, or `退市` unless the user explicitly asks to include ST.
 
+Also collect `回头波` risk from the A-share evening review. `回头波 = (日内最高价 - 收盘价) / 日内最高价 * 100%`; count non-ST stocks where `回头波 > 8%`. Use it to judge intraday fade and chasing-loss pressure before applying US/global catalysts.
+
 ### US market and theme data
 
 Use low-frequency public sources:
@@ -106,7 +108,8 @@ US/global signals can add to `叙事催化` and `次日观察优先级`; they mu
 2. Use `a-share-short-review` to collect market data and write the short-review structure.
 3. Use `quant-test` to calculate 880005 emotion clock, quantitative score, six-direction main-line ranking, stock pool, windows, and position cap.
 4. Ensure all limit-up/down statistics use non-ST口径.
-5. Save evening integrated A-share files under `A股复盘/全球映射早盘复盘` unless the user specifies another folder. Suggested filename: `YYYYMMDD A股全球映射复盘.md` or keep the user's naming convention.
+5. Include `回头波风险统计`: count non-ST stocks with `回头波 > 8%`, show concentrated themes and representative names, and state whether intraday fade weakens any main-line continuation.
+6. Save evening integrated A-share files under `A股复盘/全球映射早盘复盘` unless the user specifies another folder. Suggested filename: `YYYYMMDD A股全球映射复盘.md` or keep the user's naming convention.
 
 Required evening sections:
 
@@ -114,11 +117,12 @@ Required evening sections:
 2. `◆ 二、A股市场全景`
 3. `◆ 三、创新高历史个股分析`
 4. `◆ 四、连板梯队与涨跌停结构`
-5. `◆ 五、主线板块量化排名`
-6. `◆ 六、选股观察池`
-7. `◆ 七、明日窗口计划`
-8. `◆ 八、仓位与纪律`
-9. `◆ 九、风险提示`
+5. `◆ 五、回头波风险统计`
+6. `◆ 六、主线板块量化排名`
+7. `◆ 七、选股观察池`
+8. `◆ 八、明日窗口计划`
+9. `◆ 九、仓位与纪律`
+10. `◆ 十、风险提示`
 
 ## Morning Global Mapping Workflow
 
@@ -126,7 +130,7 @@ Required evening sections:
 2. Pull US indices, semiconductor ETF, sector ETFs, top gainers/losers/most active, and theme baskets.
 3. Pull commodity/precious-metal watchlist and list top three gainers plus top three losers.
 4. Search fresh morning news and classify catalysts.
-5. Compare with the prior evening A-share main-line ranking. State which A-share directions rise or fall in priority.
+5. Compare with the prior evening A-share main-line ranking and 回头波风险统计. State which A-share directions rise or fall in priority.
 6. Output only an opening plan. Do not turn overnight signals into direct buy instructions.
 7. Save morning global-mapping files under `A股复盘/全球映射早盘复盘` unless the user specifies another folder. Suggested filename: `YYYYMMDD 全球市场映射A股早间复盘.md`.
 8. If email delivery is requested or configured, send a second copy as HTML email using the rules below. Do not send raw Markdown as the email body.
